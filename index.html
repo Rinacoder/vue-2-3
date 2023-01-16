@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+
+<script src="https://unpkg.com/vue@next"></script>
+
+<div id="app">
+    <div class="container ">
+        <div class="ResumeText">
+            <div class="container ">
+                <header class="pb-3 mb-4 border-bottom" style="margin-top: -45px;">
+                    <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
+                        <img src="https://dummyimage.com/200x200/061330/949dff&text=R" height="30">
+                        <span class="fs-4 m-2">Резюме</span>
+                    </a>
+                </header>
+
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <!--Форма для ввода данных-->
+                            <div class="card-body">
+                                <h4>Фото</h4>
+                                <!--Поле для загрузки ссылки на фото-->
+                                <input class="form-control" v-model="photo" />
+                                <h4>Фамилия</h4>
+                                <!--Поле для ввода фамилии-->
+                                <input class="form-control" v-model="last_name" />
+                                <h4>Имя</h4>
+                                <!--Поле для ввода имени-->
+                                <input class="form-control" v-model="name" />
+                                <h4>Дата рождения</h4>
+                                <!--Поле для указания даты рождения-->
+                                <input class="form-control" type="date" v-model="birthdate" />
+                                <h4>Город</h4>
+                                <!--Поле для ввода города-->
+                                <input class="form-control" v-model="city" />
+                                <h4>Телефон</h4>
+                                <!--Поле для ввода телефона-->
+                                <input class="form-control" maxlength="10" minlength="6" v-model="phone" />
+                                <h4>Электронная почта</h4>
+                                <!--Поле для ввода электронной почты-->
+                                <input v-model="email" @input="validateMail" class="form-control" type="text" maxlength="35">
+                                <h4>Образование</h4>
+                                <!--Поле для выбора степени образования-->
+                                <select class="form-control" v-model="education">
+                        <option>Среднее</option>
+                        <option>Среднее специальное</option>
+                        <option>Неоконченное высшее</option>
+                        <option>Высшее</option>
+                        </select>
+                                <div v-if="education == 'Среднее' || education == ''"></div>
+                                <div v-else>
+                                    <h4>Учебное заведение</h4>
+                                    <!--Поле для ввода названия учебного заведения-->
+                                    <input class="form-control" v-model="educational_institution" />
+                                    <h4>Факультет</h4>
+                                    <!--Поле для ввода названия факультета-->
+                                    <input class="form-control" v-model="faculty" />
+                                    <h4>Специализация</h4>
+                                    <!--Поле для ввода названия специализации-->
+                                    <input class="form-control" v-model="specialization" />
+                                    <h4>Год окончания</h4>
+                                    <!--Поле для ввода года окончания-->
+                                    <input class="form-control" type="number" maxlength="4" v-model="graduation" />
+                                </div>
+
+                                <h4>Желаемая должность</h4>
+                                <!--Поле для ввода желаемой должности-->
+                                <input class="form-control" v-model="profession" />
+                                <h4>Желаемый уровень дохода</h4>
+                                <!--Поле для ввода информации о желаемой заработной плате-->
+                                <input class="form-control" type="number" min="0" v-model="salary" />
+                                <h4>Навыки</h4>
+                                <!--Поле для ввода информации о ключевых навыках-->
+                                <textarea class="form-control" rows="3" v-model="skills"></textarea>
+                                <h4>О себе</h4>
+                                <!--Поле для ввода информации о себе-->
+                                <textarea class="form-control" rows="3" v-model="about_yourself"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <!--Структура генерации и вывода информации в резюме-->
+                        <div class="card h-100">
+
+                            <div class="card-body text-start ">
+                                <div class="d-flex align-items-center">
+                                    <div v-if="photo==''">
+                                        <img src="https://travel-baikal.com/bitrix/templates/.default/components/bitrix/news.list/reviews/img/logo.jpg" height="200" />
+                                    </div>
+                                    <div v-else>
+                                        <img class="m-2" :src="photo" height="200" />
+                                    </div>
+
+                                    <div class="card border-0">
+                                        <p> <strong>{{ last_name }} {{ name }}</strong></p><br>
+                                        <p>Дата рождения: {{ birthdate }}</p>
+                                        <p>Проживание: {{ city }}</p><br>
+                                        <p> <strong>Контактная информация</strong></p>
+                                        <div v-if="phone > 100000">
+                                            <p>Телефон: {{ phone }}</p>
+                                        </div>
+                                        <div v-else class="text-danger">
+                                            <p>Введите корректный телефон, от 6 до 10 цифр</p>
+                                        </div>
+
+                                        <div v-if=" (email == ''|| erMail.length > 0)">
+                                            <p class="form-input my-3">Введите почту корректно. Например example@mail.ru</p>
+                                        </div>
+                                        <p class="form-input my-3" v-else>{{ email }} </p>
+                                    </div>
+                                </div>
+
+                                <p><strong>Образование:</strong> {{ education }}</p><br>
+                                <div v-if="education == 'Среднее' || education == ''"></div>
+                                <div v-else>
+                                    <p><strong>Учебное заведение:</strong> {{ educational_institution }}</p>
+                                    <p><strong>Факультет:</strong> {{ faculty }}</p>
+                                    <p><strong>Специализация:</strong> {{ specialization }}</p>
+                                    <div v-if="graduation < 2201 && graduation > 1899">
+                                        <p><strong>Год окончания:</strong> {{ graduation }}</p><br>
+                                    </div>
+                                    <div v-else class="text-danger">
+                                        <p> Введите корректный год окончания обучения, от 1900 до 2200 </p><br>
+                                    </div>
+                                </div>
+                                <p><strong>Желаемая должность:</strong> {{ profession }}</p>
+                                <p><strong>Желаемый уровень дохода:</strong> {{ salary }}</p><br>
+                                <p><strong>Ключевые навыки:</strong></p>
+                                <p style="white-space: pre-line;">{{ skills }}</p>
+                                <p><strong>О себе</strong></p>
+                                <p style="white-space: pre-line;">{{ about_yourself }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="pt-3 mt-4 text-muted border-top">
+                    &copy; 2022
+                </footer>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="index.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+
+</html>
